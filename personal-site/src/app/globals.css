@@ -9,15 +9,6 @@
 }
 
 @layer components {
-  .nav-items {
-    @apply relative text-neutral-700 tracking-[1px] dark:text-gray-400 font-mono font-bold hover:text-black dark:hover:text-gray-300;
-  }
-  .nav-items::after {
-    @apply content-[""] bg-[#51ff25] h-[3px] w-[0%] left-0 -bottom-[5px] rounded-xl absolute duration-300;
-  }
-  .nav-items:hover::after {
-    @apply w-[100%];
-  }
   .lightmode-button {
     @apply w-8 h-8 rounded-full flex justify-center items-center bg-black dark:bg-white text-white dark:text-black hover:bg-slate-500 dark:hover:bg-slate-500;
   }

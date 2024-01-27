@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Lightmode from "../lightmode/Lightmode";
 import { FaBars } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
 const pages = [
   {
@@ -29,11 +30,23 @@ const pages = [
 ];
 
 export default function Navbar() {
-  const [menuShow, setMenuShow] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const showMenu = () => {
-    setMenuShow(!menuShow);
-  };
+  useEffect(() => {
+    const mediaQuery = () => {
+      if (window.innerWidth > 768 && isOpen == "true") {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", mediaQuery);
+
+    mediaQuery();
+
+    return () => window.removeEventListener("resize", mediaQuery);
+  }, []);
+
+  const showMenu = () => setIsOpen(!isOpen);
 
   return (
     <div className="max-w-2xl mx-auto flex items-center justify-end h-[6rem] px-4">
@@ -49,32 +62,33 @@ export default function Navbar() {
           <Lightmode />
         </li>
       </ul>
-      <div onClick={showMenu} className="flex md:hidden">
+      <div onClick={showMenu} className="md:hidden flex fixed">
         <FaBars size={20} />
       </div>
-      <div
-        className={
-          !menuShow
-            ? "fixed right-0 top-0 w-[50%] h-full border-l border-r-gray-700 bg-neutral-200 dark:bg-black duration-1000"
-            : "fixed top-0 right-[-100%] h-full border-l border-r-gray-700 bg-neutral-200 dark:bg-black duration-1000"
-        }
-      >
-        <ul className="flex  flex-col uppercase pt-5 border-l border-l-gray-700">
-          <li className="p-4 mx-5 self-end" onClick={showMenu}>
-            <FaBars size={20} />
-          </li>
-          {pages.map((page) => (
-            <li className="p-4 mx-5 border-b-gray-700 border-b" key={page.name}>
-              <Link component="a" className="nav-items" href={page.path}>
-                {page.name}
-              </Link>
-            </li>
-          ))}
-          <li className="p-4 mx-5 border-b-gray-700 border-b">
-            <Lightmode />
-          </li>
-        </ul>
-      </div>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ width: "0", fixed: true }}
+            animate={{ width: "50%", fixed: true }}
+            transition={{ duration: 0.5, ease: "easeIn" }}
+            exit={{ width: "0", fixed: true, top: 0, right: 0 }}
+            className="bg-black h-full w-full md:hidden"
+          >
+            <ul className="flex flex-col pt-10 border-l border-l-gray-500 h-[100vh]">
+              {pages.map((page) => (
+                <li
+                  className="ml-6 p-4 border-b border-b-gray-500"
+                  key={page.name}
+                >
+                  <Link component="a" className="nav-items" href={page.path}>
+                    {page.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
