@@ -72,9 +72,9 @@ export default function Navbar() {
             animate={{ width: "50%", fixed: true }}
             transition={{ duration: 0.5, ease: "easeIn" }}
             exit={{ width: "0", fixed: true, top: 0, right: 0 }}
-            className="bg-black h-full w-full md:hidden"
+            className="h-full w-full md:hidden"
           >
-            <ul className="flex flex-col pt-10 border-l border-l-gray-500 h-[100vh]">
+            <ul className="pt-10 border-l border-l-gray-500 h-[100vh]">
               {pages.map((page) => (
                 <li
                   className="ml-6 p-4 border-b border-b-gray-500"
@@ -85,6 +85,9 @@ export default function Navbar() {
                   </Link>
                 </li>
               ))}
+              <li className="ml-6 p-4">
+                <Lightmode />
+              </li>
             </ul>
           </motion.div>
         )}
