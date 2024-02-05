@@ -49,27 +49,31 @@ export default function Navbar() {
   const showMenu = () => setIsOpen(!isOpen);
 
   return (
-    <div className="max-w-2xl mx-auto flex items-center justify-end h-[6rem] px-4">
+    <div className="w-full justify-end md:justify-center items-center fixed mx-auto flex h-[6rem] px-4">
       <ul className="hidden justify-center items-center md:flex">
         {pages.map((page) => (
-          <li className="p-4" key={page.name}>
-            <Link component="a" className="nav-items" href={page.path}>
+          <motion.li
+            whileHover={{ scale: 1.2, opacity: 0.8 }}
+            className="p-4"
+            key={page.name}
+          >
+            <Link className="nav-items" href={page.path}>
               {page.name}
             </Link>
-          </li>
+          </motion.li>
         ))}
-        <li className="p-4">
+        <motion.li whileHover={{ scale: 1.2, opacity: 0.8 }} className="p-4">
           <Lightmode />
-        </li>
+        </motion.li>
       </ul>
-      <div onClick={showMenu} className="md:hidden flex fixed">
+      <div onClick={showMenu} className="md:hidden fixed z-[100]">
         <FaBars size={20} />
       </div>
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ width: "0", fixed: true }}
-            animate={{ width: "50%", fixed: true }}
+            initial={{ width: "0", sticky: true }}
+            animate={{ width: "50%", sticky: true }}
             transition={{ duration: 0.5, ease: "easeIn" }}
             exit={{ width: "0", fixed: true, top: 0, right: 0 }}
             className="h-full w-full md:hidden"
